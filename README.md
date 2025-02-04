@@ -1,4 +1,4 @@
-# Bookstore Analysis Using SQL
+# Bookstore Analysis Using SQL ![Bookstore](https://img.shields.io/badge/-Bookstore-FF6347?style=flat-square&logo=book&logoColor=white)
 
 ## Project Overview
 This project focuses on analyzing a bookstore database using SQL. The dataset includes information about books, customers, and orders, allowing us to derive insights related to book sales, stock management, and customer purchases. The queries help in understanding revenue generation, stock availability, and customer ordering behavior.
