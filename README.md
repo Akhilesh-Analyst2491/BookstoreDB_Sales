@@ -14,16 +14,72 @@ The analysis is based on structured data stored in MySQL, which includes:
 2. Imported data from CSV files into MySQL.
 3. Executed analytical SQL queries to extract insights.
 
-## Business Requests
-1. **Orders in November 2023**: Retrieve all orders placed within this month.
-2. **Total Stock**: Calculate the total number of books available in stock.
-3. **Most Expensive Book**: Identify the most expensive book in the collection.
-4. **Customers Who Ordered More Than One Item**: Find customers who purchased multiple books.
-5. **High-Value Orders**: Retrieve all orders where the total amount exceeds $20.
-6. **List of Available Genres**: Display all unique book genres in the database.
-7. **Lowest Stock Book**: Identify the book with the least stock remaining.
-8. **Total Revenue Calculation**: Compute the total revenue generated from all sales.
-9. **Stock Remaining After Orders**: Calculate the stock left after fulfilling all orders.
+# SQL Queries for Bookstore Database
+
+Here are the SQL queries for various tasks related to a bookstore database.
+
+---
+
+### 1. **Orders in November 2023**: Retrieve all orders placed within this month. 
+```sql
+SELECT * 
+FROM Orders 
+WHERE order_date BETWEEN '2023-11-01' AND '2023-11-30';
+```
+### 2. **Total Stock**: Calculate the total number of books available in stock.
+```sql
+SELECT SUM(Stock) AS Total_Stock 
+FROM Books;
+```
+
+### 3. **Most Expensive Book**: Identify the most expensive book in the collection.
+```sql
+SELECT * 
+FROM Books 
+ORDER BY Price DESC 
+LIMIT 1;
+```
+### 4. **Customers Who Ordered More Than One Item**: Find customers who purchased multiple books.
+```sql
+SELECT * 
+FROM Orders 
+WHERE Quantity > 1;
+```
+### 5. **High-Value Orders**: Retrieve all orders where the total amount exceeds 20.
+```sql
+SELECT * 
+FROM Orders 
+WHERE Total_Amount > 20;
+```
+### 6. **List of Available Genres**: Display all unique book genres in the database.
+```sql
+SELECT DISTINCT Genre 
+FROM Books;
+```
+### 7. **Lowest Stock Book**: Identify the book with the least stock remaining.
+```sql
+SELECT * 
+FROM Books 
+ORDER BY Stock ASC 
+LIMIT 1;
+```
+### 8. **Total Revenue Calculation**: Compute the total revenue generated from all sales.
+```sql
+SELECT SUM(Total_Amount) AS Total_Revenue 
+FROM Orders;
+```
+#### 9. **Stock Remaining After Orders**: Calculate the stock left after fulfilling all orders.
+```sql
+SELECT b.Book_ID, 
+       b.Title, 
+       b.Stock AS Initial_Stock, 
+       COALESCE(SUM(o.Quantity), 0) AS Total_Sold, 
+       (b.Stock - COALESCE(SUM(o.Quantity), 0)) AS Remaining_Stock
+FROM Books b
+LEFT JOIN Orders o ON b.Book_ID = o.Book_ID
+GROUP BY b.Book_ID, b.Title, b.Stock;
+```
+
 
 ## Limitations and Challenges
 - **Incomplete Data Handling**: Missing customer details may affect order analysis.
@@ -45,11 +101,6 @@ This analysis provides valuable insights into the bookstore's sales, stock level
 - **Order Frequency by Customer**: Determining which customers make repeat purchases.
 - **City-Wise Sales Performance**: Understanding regional differences in book demand.
 
-## Visualizations
-For a more interactive analysis, consider using Power BI or Tableau to visualize:
-- Sales trends over time.
-- Revenue distribution across book genres.
-- Customer demographics and purchase behavior.
 
 ## Future Work
 - Incorporate discounts and promotions into revenue calculations.
